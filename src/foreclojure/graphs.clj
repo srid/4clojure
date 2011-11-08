@@ -16,6 +16,9 @@
   (apply concat (for [[x count] frequencies]
                   (repeat count x))))
 
+(defn best-of-all [frequencies]
+  (ffirst (sort frequencies)))
+
 (defn fetch-score-frequencies [problem-id]
   (-> @solved-stats
       (get problem-id)
@@ -27,7 +30,8 @@
         [best curr] [(or best curr) (or curr best)]
         chart (chart/histogram chart-data
                                :title (str "League scores: problem " id)
-                               :x-label "Solution length"
+                               :x-label (format "Solution length (best: %s)"
+                                                (best-of-all freqs))
                                :y-label "How often"
                                :nbins 25)]
     (when best
